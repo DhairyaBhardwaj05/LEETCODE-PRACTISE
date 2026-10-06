@@ -1,0 +1,59 @@
+/*The problem states that we have to remove the duplicated element from the linked list , duplicates here doesnot only means two , it can be two or more than two .
+Coming onto the actual thought process which we need to develop is -
+1) what are program will return for null ll or one element ll , it will returh the same head 
+2) we need to skip all the values and connect previous thing to next 
+3) we will be using dummy head to maintain the head , because head can change too 
+4) we need a previous pointer variable which will be used to connect distinct pieces 
+5) most importantly there will be two cases 1-duplicates appear 2-duplicated dont appear 
+Basic structure is -
+traversing while to temp next not equal to null and temp not equal to null in this order 
+then inside two conditions 1-duplicates appear that means temp value equals temp next value 
+then when both are equal we will traverse as temp = temp->next
+then after coming out of the loop , the pointer is on the last of repeated node then we will do prev->next = temp->next and increase temp 
+for else when normal traversal of temp to next and prev to next
+after completing all things return dummy.next
+*/
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution 
+{
+public:
+    ListNode* deleteDuplicates(ListNode* head) 
+    {
+       ListNode dummy;
+       ListNode* prev;
+       ListNode* temp;
+       ListNode* temp2;
+       if(head==NULL || head->next==NULL)
+       return head;
+       temp=head;
+       dummy.next=head;
+       prev=&dummy;
+       while(temp!=NULL && temp->next!=NULL)
+       {
+        if(temp->val==temp->next->val)
+        {
+            while(temp->next!=NULL && temp->val==temp->next->val)
+            temp=temp->next;
+            prev->next=temp->next;
+            temp=temp->next;
+        }
+        else
+        {
+            temp=temp->next;
+            prev=prev->next;
+        }
+       }
+       return dummy.next;
+    }
+};
