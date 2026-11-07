@@ -1,0 +1,38 @@
+class Solution 
+{
+public:
+    vector<int> assignTasks(vector<int>& servers, vector<int>& tasks) 
+    {
+        int i;
+        long long t=0;
+        priority_queue <pair<long long,long long>,vector<pair<long long,long long>>,greater<pair<long long,long long>>> available;
+        priority_queue <vector<long long>,vector<vector<long long>>,greater<vector<long long>>> unavailable;
+        vector <int> res;
+        for(i=0;i<(int)servers.size();i++)
+        {
+            available.push({servers[i],i});
+        }
+        for(i=0;i<(int)tasks.size();i++)
+        {
+            t=max(t,(long long)i);
+            while(!unavailable.empty() && unavailable.top()[0]<=t)
+            {
+                available.push({unavailable.top()[1],unavailable.top()[2]});
+                unavailable.pop();
+            }
+            if(available.empty())
+            {
+                t=unavailable.top()[0];
+                while(!unavailable.empty() && unavailable.top()[0]<=t)
+                    {
+                        available.push({unavailable.top()[1],unavailable.top()[2]});
+                        unavailable.pop();
+                    }
+            }
+                unavailable.push({t+tasks[i],available.top().first,available.top().second});
+                res.push_back(available.top().second);
+                available.pop();
+        }
+        return res;
+    }
+};
